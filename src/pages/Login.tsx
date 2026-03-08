@@ -13,8 +13,10 @@ export function Login() {
 
     useEffect(() => {
         const accessToken = searchParams.get("access_token");
-        if (accessToken) {
+        const refreshToken = searchParams.get("refresh_token");
+        if (accessToken && refreshToken) {
             localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("refresh_token", refreshToken);
             navigate("/employees", {replace: true});
         } else {
             navigate("/login", {replace: true});
@@ -29,6 +31,9 @@ export function Login() {
         try {
             const response = await AuthService.login({username, password});
             localStorage.setItem('access_token', response.accessToken);
+            if (response.refreshToken) {
+                localStorage.setItem('refresh_token', response.refreshToken);
+            }
             navigate('/employees');
         } catch (err) {
             let message = 'Login failed. Please check your credentials.';
