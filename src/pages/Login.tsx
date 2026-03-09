@@ -18,8 +18,22 @@ export function Login() {
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
             navigate("/employees", {replace: true});
-        } else {
-            navigate("/login", {replace: true});
+            return;
+        }
+
+        const storedRefreshToken = localStorage.getItem("refresh_token");
+        if (storedRefreshToken) {
+            AuthService.refreshToken({refreshToken: storedRefreshToken})
+                .then(response => {
+                    localStorage.setItem("access_token", response.accessToken);
+                    localStorage.setItem("refresh_token", response.refreshToken);
+                    navigate("/employees", {replace: true});
+                })
+                .catch(() => {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    navigate("/login", {replace: true});
+                });
         }
     }, [searchParams, navigate]);
 
