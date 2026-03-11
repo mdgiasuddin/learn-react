@@ -1,6 +1,12 @@
 import axios from "axios";
 
-export interface LoginRequest {
+export interface LonginRequest {
+    username: string;
+    password: string;
+}
+
+export interface UserRegistrationRequest {
+    name: string;
     username: string;
     password: string;
 }
@@ -17,9 +23,12 @@ export interface AuthResponse {
 const AUTH_API_URL = 'http://localhost:8194/api/auth';
 
 const AuthService = {
-    login: async (request: LoginRequest): Promise<AuthResponse> => {
+    login: async (request: LonginRequest): Promise<AuthResponse> => {
         const response = await axios.post<AuthResponse>(`${AUTH_API_URL}/login`, request);
         return response.data;
+    },
+    registerUser: async (request: UserRegistrationRequest): Promise<void> => {
+        await axios.post(`${AUTH_API_URL}/register`, request);
     },
     refreshToken: async (request: TokenRefreshRequest): Promise<AuthResponse> => {
         const response = await axios.post<AuthResponse>(`${AUTH_API_URL}/refresh/access-token`, request);

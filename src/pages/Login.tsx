@@ -1,4 +1,4 @@
-import {type FormEvent, useEffect, useState} from 'react';
+import {type SubmitEvent, useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import axios from 'axios';
 import AuthService from '../services/AuthService';
@@ -37,7 +37,7 @@ export function Login() {
         }
     }, [searchParams, navigate]);
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
@@ -45,9 +45,7 @@ export function Login() {
         try {
             const response = await AuthService.login({username, password});
             localStorage.setItem('access_token', response.accessToken);
-            if (response.refreshToken) {
-                localStorage.setItem('refresh_token', response.refreshToken);
-            }
+            localStorage.setItem('refresh_token', response.refreshToken);
             navigate('/employees');
         } catch (err) {
             let message = 'Login failed. Please check your credentials.';
@@ -119,7 +117,7 @@ export function Login() {
                         <span className="text-gray-500 dark:text-gray-400">Don't have an account? </span>
                         <button
                             type="button"
-                            onClick={() => navigate('/signup')}
+                            onClick={() => navigate('/register')}
                             className="text-teal-500 hover:text-teal-600 font-semibold transition-colors"
                         >
                             Sign Up
