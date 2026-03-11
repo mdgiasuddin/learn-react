@@ -49,6 +49,7 @@ axiosApi.interceptors.request.use(
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
                 localStorage.removeItem('name');
+                window.dispatchEvent(new Event('storage'));
                 window.location.href = '/login';
             } finally {
                 isRefreshing = false;
@@ -110,6 +111,7 @@ axiosApi.interceptors.response.use(
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
                 localStorage.removeItem('name');
+                window.dispatchEvent(new Event('storage'));
                 window.location.href = '/login';
                 return Promise.reject(refreshError);
             } finally {

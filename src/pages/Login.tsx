@@ -2,6 +2,7 @@ import {type SubmitEvent, useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import axios from 'axios';
 import AuthService from '../services/AuthService';
+import {useAuth} from "../context/useAuth.ts";
 
 export function Login() {
     const [username, setUsername] = useState('');
@@ -10,15 +11,16 @@ export function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const {setName} = useAuth();
 
     useEffect(() => {
         const name = searchParams.get("name");
         const accessToken = searchParams.get("access_token");
         const refreshToken = searchParams.get("refresh_token");
         if (name && accessToken && refreshToken) {
-            localStorage.setItem("name", name);
             localStorage.setItem("access_token", accessToken);
             localStorage.setItem("refresh_token", refreshToken);
+            setName(name);
             navigate("/employees", {replace: true});
             return;
         }
@@ -27,19 +29,19 @@ export function Login() {
         if (storedRefreshToken) {
             AuthService.refreshToken({refreshToken: storedRefreshToken})
                 .then(response => {
-                    localStorage.setItem("name", response.name);
                     localStorage.setItem("access_token", response.accessToken);
                     localStorage.setItem("refresh_token", response.refreshToken);
+                    setName(response.name);
                     navigate("/employees", {replace: true});
                 })
                 .catch(() => {
-                    localStorage.removeItem("name");
+                    setName(null);
                     localStorage.removeItem("access_token");
                     localStorage.removeItem("refresh_token");
                     navigate("/login", {replace: true});
                 });
         }
-    }, [searchParams, navigate]);
+    }, [searchParams, navigate, setName]);
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -48,9 +50,9 @@ export function Login() {
 
         try {
             const response = await AuthService.login({username, password});
-            localStorage.setItem('name', response.name);
             localStorage.setItem('access_token', response.accessToken);
             localStorage.setItem('refresh_token', response.refreshToken);
+            setName(response.name);
             navigate('/employees');
         } catch (err) {
             let message = 'Login failed. Please check your credentials.';
