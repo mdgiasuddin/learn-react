@@ -46,6 +46,10 @@ axiosApi.interceptors.request.use(
                 processQueue(null, token);
             } catch (err) {
                 processQueue(err, null);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('name');
+                window.location.href = '/login';
             } finally {
                 isRefreshing = false;
             }
@@ -103,9 +107,10 @@ axiosApi.interceptors.response.use(
                 return axiosApi(originalRequest);
             } catch (refreshError) {
                 processQueue(refreshError, null);
-                // Redirect to login or logout user if refresh fails
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
+                localStorage.removeItem('name');
+                window.location.href = '/login';
                 return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;

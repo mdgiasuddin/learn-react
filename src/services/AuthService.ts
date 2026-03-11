@@ -16,6 +16,7 @@ export interface TokenRefreshRequest {
 }
 
 export interface AuthResponse {
+    name: string;
     accessToken: string;
     refreshToken: string;
 }
