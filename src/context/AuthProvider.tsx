@@ -1,5 +1,5 @@
 import React, {type ReactNode, useEffect, useState} from 'react';
-import {AuthContext} from './useAuth';
+import {AuthContext} from './UseAuth.ts';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [name, setName] = useState<string | null>(localStorage.getItem('name'));

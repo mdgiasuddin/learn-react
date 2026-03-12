@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {ChevronDown, LogOut, Moon, Sun, User} from "lucide-react";
 import {useEffect, useState} from "react";
 import AuthService from "../services/AuthService.ts";
-import {useAuth} from "../context/useAuth.ts";
+import {useAuth} from "../context/UseAuth.ts";
 
 export function Navbar() {
     const navigate = useNavigate();

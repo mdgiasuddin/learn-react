@@ -36,14 +36,8 @@ const AuthService = {
         return response.data;
     },
     logout: async (): Promise<void> => {
-        const accessToken = localStorage.getItem('access_token');
-        if (accessToken) {
-            await axios.post(`${AUTH_API_URL}/logout`, {}, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-        }
+        const refreshToken = localStorage.getItem('refresh_token');
+        await axios.post(`${AUTH_API_URL}/logout`, {refreshToken});
     }
 }
 export default AuthService;

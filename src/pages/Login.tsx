@@ -2,7 +2,7 @@ import {type SubmitEvent, useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import axios from 'axios';
 import AuthService from '../services/AuthService';
-import {useAuth} from "../context/useAuth.ts";
+import {useAuth} from "../context/UseAuth.ts";
 
 export function Login() {
     const [username, setUsername] = useState('');
